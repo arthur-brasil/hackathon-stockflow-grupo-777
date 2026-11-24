@@ -1,0 +1,41 @@
+<form (ngSubmit)="enviar()">
+  <div class="campo">
+    <label for="nome">Nome *</label>
+    <input id="nome" name="nome" [(ngModel)]="form.nome" placeholder="Ex.: Caderno" />
+  </div>
+
+  <div class="campo">
+    <label for="categoria">Categoria *</label>
+    <input id="categoria" name="categoria" [(ngModel)]="form.categoria" placeholder="Ex.: Papelaria" />
+  </div>
+
+  <div class="campo">
+    <label for="quantidade">Quantidade *</label>
+    <input id="quantidade" name="quantidade" type="number" min="0" [(ngModel)]="form.quantidade" />
+  </div>
+
+  <div class="campo">
+    <label for="estoqueMinimo">Estoque mínimo *</label>
+    <input id="estoqueMinimo" name="estoqueMinimo" type="number" min="0" [(ngModel)]="form.estoqueMinimo" />
+  </div>
+
+  <div class="campo largo">
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" rows="2" [(ngModel)]="form.descricao" placeholder="Opcional"></textarea>
+  </div>
+
+  @if (erros().length) {
+    <ul class="erros largo">
+      @for (e of erros(); track e) {
+        <li>{{ e }}</li>
+      }
+    </ul>
+  }
+
+  <div class="acoes largo">
+    <button type="submit" class="primario">{{ produto() ? 'Salvar alterações' : 'Cadastrar produto' }}</button>
+    @if (produto()) {
+      <button type="button" (click)="limpar()">Cancelar edição</button>
+    }
+  </div>
+</form>

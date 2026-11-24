@@ -1,0 +1,30 @@
+<header>
+  <h1>StockFlow</h1>
+  <button type="button" class="secundario" (click)="carregar()">Atualizar</button>
+</header>
+
+<main>
+  @if (erro()) {
+    <p class="alerta erro">{{ erro() }}</p>
+  }
+  @if (mensagem()) {
+    <p class="alerta sucesso">{{ mensagem() }}</p>
+  }
+
+  <section>
+    <h2>{{ emEdicao() ? 'Editar produto #' + emEdicao()!.id : 'Novo produto' }}</h2>
+    <app-produto-form
+      [produto]="emEdicao()"
+      [erros]="errosForm()"
+      (salvar)="salvar($event)"
+      (cancelar)="cancelarEdicao()" />
+  </section>
+
+  <section>
+    <h2>Produtos</h2>
+    <app-produto-lista
+      [produtos]="produtos()"
+      (editar)="editar($event)"
+      (excluir)="excluir($event)" />
+  </section>
+</main>

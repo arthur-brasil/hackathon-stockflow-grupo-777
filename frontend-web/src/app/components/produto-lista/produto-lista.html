@@ -1,0 +1,66 @@
+<div class="filtros">
+  <label>
+    Categoria
+    <select [value]="categoria()" (change)="trocarCategoria($event)">
+      <option value="TODAS">Todas ({{ produtos().length }})</option>
+      @for (c of categorias(); track c) {
+        <option [value]="c">{{ c }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="check">
+    <input type="checkbox" [checked]="soEstoqueBaixo()" (change)="trocarEstoqueBaixo($event)" />
+    Só estoque baixo ({{ qtdEstoqueBaixo() }})
+  </label>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Produto</th>
+      <th>Categoria</th>
+      <th class="num">Quantidade</th>
+      <th class="num">Estoque mínimo</th>
+      <th>Situação</th>
+      <th class="acoes">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of visiveis(); track p.id) {
+      <tr [class.baixo]="p.estoqueBaixo">
+        <td class="id">{{ p.id }}</td>
+        <td>
+          <strong>{{ p.nome }}</strong>
+          @if (p.descricao) {
+            <small>{{ p.descricao }}</small>
+          }
+        </td>
+        <td>{{ p.categoria }}</td>
+        <td class="num"><strong>{{ p.quantidade }}</strong></td>
+        <td class="num">{{ p.estoqueMinimo }}</td>
+        <td>
+          @if (p.estoqueBaixo) {
+            <span class="selo baixo">Estoque baixo</span>
+          } @else {
+            <span class="selo ok">OK</span>
+          }
+        </td>
+        <td class="acoes">
+          @if (confirmando() === p.id) {
+            <button type="button" class="perigo" (click)="confirmarExclusao(p)">Confirmar exclusão</button>
+            <button type="button" (click)="confirmando.set(null)">Não</button>
+          } @else {
+            <button type="button" (click)="editar.emit(p)">Editar</button>
+            <button type="button" class="perigo-leve" (click)="confirmando.set(p.id)">Excluir</button>
+          }
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7" class="vazio">Nenhum produto encontrado.</td>
+      </tr>
+    }
+  </tbody>
+</table>
